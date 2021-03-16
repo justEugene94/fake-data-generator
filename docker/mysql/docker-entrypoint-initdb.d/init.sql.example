@@ -1,0 +1,6 @@
+CREATE DATABASE IF NOT EXISTS `data_generator`;
+GRANT ALL PRIVILEGES ON `data_generator`.* TO 'data_generator'@'%';
+
+USE data_generator;
+
+FLUSH PRIVILEGES ;
