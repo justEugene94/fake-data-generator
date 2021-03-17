@@ -3,3 +3,5 @@
 /docker/mysql/data/*
 /docker/mysql/docker-entrypoint-initdb.d/*.sql
 /docker/mysql/docker-entrypoint-initdb.d/*.sql.gz
+__pycache__/
+*.pyc
