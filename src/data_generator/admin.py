@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from data_generator.models import Schema
+
+admin.site.register(Schema)

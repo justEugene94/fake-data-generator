@@ -1,0 +1,40 @@
+{% extends 'data_generator/base.html' %}
+
+{% block content %}
+
+    <div class="row justify-content-between">
+        <div class="col">
+            <h4><strong>Schemas</strong></h4>
+        </div>
+        <div class="col offset-md-8">
+            <a href="#" class="btn btn-success">New Schema</a>
+        </div>
+
+    </div>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Modified</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for schema in schemas %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a href="#">{{ schema.name }}</a></td>
+                    <td>{{ schema.pub_date|date:"Y-m-d" }}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary"> Edit </a>
+                        <a href="#" class="btn btn-danger"> Delete </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
