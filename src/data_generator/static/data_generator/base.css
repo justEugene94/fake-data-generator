@@ -1,0 +1,13 @@
+.custom-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1400px;
+}
+
+.formset-main {
+    width: 15%;
+}
+.formset-secondary {
+    width: 5%;
+}

@@ -1,0 +1,23 @@
+{% extends 'data_generator/base.html' %}
+
+{% block content %}
+
+    <form>
+        <div class="row justify-content-between">
+            <div class="col">
+                <h4><strong>New Schema</strong></h4>
+            </div>
+            <div class="col offset-md-8">
+                <button type="submit" class="btn btn-primary"> Submit </button>
+            </div>
+        </div>
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="form-row custom-row">
+            {{ formset }}
+        </div>
+
+    </form>
+
+{% endblock %}
