@@ -49,7 +49,6 @@ class Column(models.Model):
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     range = models.CharField(max_length=50, blank=True, null=True)
-    order = models.IntegerField()
 
     def __str__(self):
         return self.name
