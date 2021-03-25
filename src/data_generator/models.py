@@ -28,8 +28,22 @@ class Schema(models.Model):
         verbose_name_plural = "Schemas"
 
 
+class Type(models.Model):
+    """ Model Type """
+
+    name = models.CharField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'types'
+        verbose_name = "Type"
+        verbose_name_plural = "Types"
+
+
 class Column(models.Model):
-    """Model Column """
+    """ A Column for Schema """
 
     class Type(models.TextChoices):
         """ enum type """
