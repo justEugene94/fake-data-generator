@@ -31,7 +31,7 @@ class Schema(models.Model):
 class Type(models.Model):
     """ Model Type """
 
-    name = models.CharField()
+    name = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
@@ -45,21 +45,9 @@ class Type(models.Model):
 class Column(models.Model):
     """ A Column for Schema """
 
-    class Type(models.TextChoices):
-        """ enum type """
-        Full_NAME = 'FN'
-        JOB = 'J'
-        EMAIL = 'E'
-        DOMAIN_NAME = 'DN'
-        PHONE_NUMBER = 'PN'
-        TEXT = 'T'
-        INTEGER = 'I'
-        ADDRESS = 'A'
-        DATA = 'D'
-
     schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
+    type = models.ForeignKey(Type, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    type = models.CharField(max_length=2, choices=Type.choices)
     range = models.CharField(max_length=50, blank=True, null=True)
     order = models.IntegerField()
 
@@ -73,7 +61,7 @@ class Column(models.Model):
 
 
 class FakeData(models.Model):
-    """ Model FakeData """
+    """ Model FakeData for Schema """
 
     schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
     data = models.CharField(max_length=200)
