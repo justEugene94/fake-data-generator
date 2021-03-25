@@ -43,7 +43,7 @@ class NewSchemaView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        column_form_set = formset_factory(ColumnForm, BaseColumnFormSet)
+        column_form_set = formset_factory(ColumnForm, BaseColumnFormSet, can_delete=True, can_order=True)
         if self.request.POST:
             context['form'] = SchemaForm(self.request.POST)
             context['formset'] = column_form_set(self.request.POST)

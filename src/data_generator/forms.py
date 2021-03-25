@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import BaseFormSet
 
-from data_generator.models import Column, Schema
+from data_generator.models import Column, Schema, Type
 
 
 class SchemaForm(forms.ModelForm):
@@ -35,32 +35,19 @@ class SchemaForm(forms.ModelForm):
 class ColumnForm(forms.ModelForm):
     """ Form for columns """
 
-    Type = [
-        ('FN', 'Full name'),
-        ('J', 'Job'),
-        ('E', 'Email'),
-        ('DN', 'Domain name'),
-        ('PN', 'Phone number'),
-        ('T', 'Text'),
-        ('I', 'Integer'),
-        ('A', 'Address'),
-        ('D', 'Data'),
-    ]
-
     name = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={'autofocus': True, 'class': 'form-control formset-main', 'placeholder': 'column name', 'label': 'Column name'}))
-    type = forms.ChoiceField(required=False, choices=Type, widget=forms.Select(
-        attrs={'autofocus': True, 'class': 'form-control formset-main', 'placeholder': 'type'}))
+        attrs={'autofocus': True, 'class': 'form-control formset-main', 'placeholder': 'column name',
+               'label': 'Column name'}))
+    type = forms.ModelChoiceField(queryset=Type.objects.all(), required=False, widget=forms.Select(
+        attrs={'autofocus': True, 'class': 'form-control formset-main'}))
     range_min = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'autofocus': True, 'class': 'form-control formset-secondary', 'placeholder': '0'}))
     range_max = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'autofocus': True, 'class': 'form-control formset-secondary', 'placeholder': '0'}))
-    order = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={'autofocus': True, 'class': 'form-control formset-main', 'placeholder': 'order'}))
 
     class Meta:
         model = Column
-        fields = ['name', 'type', 'range_min', 'range_max', 'order']
+        fields = ['name', 'type', 'range_min', 'range_max']
 
 
 class BaseColumnFormSet(BaseFormSet):
