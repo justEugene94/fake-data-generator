@@ -1,0 +1,36 @@
+- model: data_generator.type
+  plk: 1
+  fields:
+    name: Full name
+- model: data_generator.type
+  plk: 2
+  fields:
+    name: Job
+- model: data_generator.type
+  plk: 3
+  fields:
+    name: Email
+- model: data_generator.type
+  plk: 4
+  fields:
+    name: Domain name
+- model: data_generator.type
+  plk: 5
+  fields:
+    name: Phone number
+- model: data_generator.type
+  plk: 6
+  fields:
+    name: Text
+- model: data_generator.type
+  plk: 7
+  fields:
+    name: Integer
+- model: data_generator.type
+  plk: 8
+  fields:
+    name: Address
+- model: data_generator.type
+  plk: 9
+  fields:
+    name: Data

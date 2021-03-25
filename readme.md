@@ -35,6 +35,11 @@ docker-compose exec python bash
 python3 manage.py migrate
 ```
 
+Seeds:
+```bash
+python3 manage.py loaddata types
+```
+
 * #### Static in python container:
 ```bash
 python3 manage.py collectstatic
