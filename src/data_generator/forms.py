@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import BaseFormSet
+from django.forms import BaseFormSet, NumberInput
 
 from data_generator.models import Column, Schema, Type
 
@@ -38,12 +38,12 @@ class ColumnForm(forms.ModelForm):
     name = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'autofocus': True, 'class': 'form-control formset-main', 'placeholder': 'column name',
                'label': 'Column name'}))
-    type = forms.ModelChoiceField(queryset=Type.objects.all(), required=False, widget=forms.Select(
-        attrs={'autofocus': True, 'class': 'form-control formset-main'}))
+    type = forms.ModelChoiceField(queryset=Type.objects.all(), required=False, empty_label='Choose', widget=forms.Select(
+        attrs={'autofocus': True, 'class': 'form-control formset-main type-selector'}))
     range_min = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={'autofocus': True, 'class': 'form-control formset-secondary', 'placeholder': '0'}))
+        attrs={'autofocus': True, 'class': 'form-control formset-secondary input-visibility', 'placeholder': '0'}))
     range_max = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={'autofocus': True, 'class': 'form-control formset-secondary', 'placeholder': '0'}))
+        attrs={'autofocus': True, 'class': 'form-control formset-secondary input-visibility', 'placeholder': '0'}))
 
     class Meta:
         model = Column
@@ -51,6 +51,7 @@ class ColumnForm(forms.ModelForm):
 
 
 class BaseColumnFormSet(BaseFormSet):
+
     def clean(self):
         """ Adds validation to check that orders don't repeat """
 
@@ -70,3 +71,6 @@ class BaseColumnFormSet(BaseFormSet):
 
         if repeat:
             raise forms.ValidationError('Order is repeated')
+
+    def get_ordering_widget(self):
+        return NumberInput(attrs={'class': 'form-control formset-secondary'})

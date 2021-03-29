@@ -1,4 +1,5 @@
 {% extends 'data_generator/base.html' %}
+{% load static %}
 
 {% block content %}
 
@@ -14,10 +15,21 @@
         {% csrf_token %}
         {{ form.as_p }}
 
-        <div class="form-row custom-row">
-            {{ formset }}
+        {{ formset.management_form }}
+        {% for form in formset %}
+        <div class="form-row custom-row formset-{{ forloop.counter0 }}">
+            {{ form }}
+            <button type="button" class="btn btn-danger" value="{{ forloop.counter0 }}"> Delete </button>
         </div>
+        {% endfor %}
+
+        <button type="button" class="btn btn-primary"> Add Column</button>
 
     </form>
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'data_generator/add_and_delete_columns.js' %}"></script>
+    <script src="{% static 'data_generator/range_visibility.js' %}"></script>
 {% endblock %}

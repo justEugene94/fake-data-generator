@@ -3,6 +3,8 @@
     flex-wrap: wrap;
     justify-content: space-between;
     max-width: 1400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .formset-main {
@@ -11,3 +13,10 @@
 .formset-secondary {
     width: 5%;
 }
+
+.input-visibility {
+    visibility: hidden;
+}
+label[for*="range"] {
+     visibility: hidden;
+ }
