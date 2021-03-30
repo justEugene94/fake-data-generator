@@ -1,5 +1,7 @@
 from django import forms
-from django.forms import BaseFormSet, NumberInput
+from django.core.exceptions import ValidationError
+from django.forms import NumberInput, modelformset_factory, BaseModelFormSet
+from django.core.validators import EMPTY_VALUES
 
 from data_generator.models import Column, Schema, Type
 
@@ -38,11 +40,12 @@ class ColumnForm(forms.ModelForm):
     name = forms.CharField(required=False, widget=forms.TextInput(
         attrs={'autofocus': True, 'class': 'form-control formset-main', 'placeholder': 'column name',
                'label': 'Column name'}))
-    type = forms.ModelChoiceField(queryset=Type.objects.all(), required=False, empty_label='Choose', widget=forms.Select(
-        attrs={'autofocus': True, 'class': 'form-control formset-main type-selector'}))
-    range_min = forms.CharField(required=False, widget=forms.TextInput(
+    type = forms.ModelChoiceField(queryset=Type.objects.all(), required=False, empty_label='Choose',
+                                  widget=forms.Select(
+                                      attrs={'autofocus': True, 'class': 'form-control formset-main type-selector'}))
+    range_min = forms.IntegerField(required=False, widget=forms.TextInput(
         attrs={'autofocus': True, 'class': 'form-control formset-secondary input-visibility', 'placeholder': '0'}))
-    range_max = forms.CharField(required=False, widget=forms.TextInput(
+    range_max = forms.IntegerField(required=False, widget=forms.TextInput(
         attrs={'autofocus': True, 'class': 'form-control formset-secondary input-visibility', 'placeholder': '0'}))
 
     class Meta:
@@ -50,7 +53,11 @@ class ColumnForm(forms.ModelForm):
         fields = ['name', 'type', 'range_min', 'range_max']
 
 
-class BaseColumnFormSet(BaseFormSet):
+class BaseColumnFormSet(BaseModelFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.queryset = Column.objects.none()
 
     def clean(self):
         """ Adds validation to check that orders don't repeat """
@@ -58,19 +65,24 @@ class BaseColumnFormSet(BaseFormSet):
         if any(self.errors):
             return
 
-        orders = []
-        repeat = False
-
+        #todo: Validation
         for form in self.forms:
-            if form.cleaned_data:
-                order = form.cleaned_data['order']
-                if order in orders:
-                    repeat = True
+            if form.cleaned_data.get('type') == 'Integer' or form.cleaned_data.get('type') == 'Text':
 
-                orders.append(order)
+                range_min = self.cleaned_data.get('range_min', None)
+                range_max = self.cleaned_data.get('range_min', None)
+                if range_min in EMPTY_VALUES:
+                    # self._errors['range_min'] = self.error_class(['Range min is required here!'])
+                    raise ValidationError('Range min is required here!')
+                if range_max in EMPTY_VALUES:
+                    # self._errors['range_max'] = self.error_class(['Range max is required here!'])
+                    raise ValidationError('Range max is required here!')
+        return self.cleaned_data
 
-        if repeat:
-            raise forms.ValidationError('Order is repeated')
 
     def get_ordering_widget(self):
         return NumberInput(attrs={'class': 'form-control formset-secondary'})
+
+
+ColumnModelFormSet = modelformset_factory(Column, fields=('name', 'type', 'range_min', 'range_max'), form=ColumnForm,
+                                          formset=BaseColumnFormSet, min_num=0, can_order=True)

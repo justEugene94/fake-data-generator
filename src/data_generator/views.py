@@ -1,8 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import formset_factory
+from django.http import HttpResponseRedirect
 from django.views.generic import ListView, CreateView
 
-from data_generator.forms import SchemaForm, ColumnForm, BaseColumnFormSet
+from data_generator.forms import SchemaForm, ColumnModelFormSet
 from data_generator.models import Schema
 
 
@@ -42,16 +42,28 @@ class NewSchemaView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        column_form_set = formset_factory(
-                                          ColumnForm,
-                                          BaseColumnFormSet,
-                                          min_num=0,
-                                          validate_min=True,
-                                          can_order=True)
-        if self.request.POST:
-            context['form'] = SchemaForm(self.request.POST)
-            context['formset'] = column_form_set(self.request.POST)
-        else:
-            context['form'] = SchemaForm()
-            context['formset'] = column_form_set()
-            return context
+
+        context['form'] = SchemaForm()
+        context['formset'] = ColumnModelFormSet()
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        schema_form = SchemaForm(self.request.POST)
+        column_model_formset = ColumnModelFormSet(self.request.POST)
+
+        if schema_form.is_valid() and column_model_formset.is_valid():
+            return self.form_valid(schema_form, column_model_formset)
+
+    def form_valid(self, schema_form, column_model_formset):
+        """ Saving models """
+
+        schema = schema_form.save(commit=False)
+        schema.user = self.request.user
+        schema.save()
+
+        instances = column_model_formset.save(commit=False)
+        for instance in instances:
+            instance.schema = schema
+            instance.save()
+        return HttpResponseRedirect('/')

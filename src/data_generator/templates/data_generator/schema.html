@@ -3,7 +3,31 @@
 
 {% block content %}
 
-    <form>
+    {% if form.errors or formset.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for dict in formset.errors %}
+                {% for error in dict.values %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'new_schema' %}">
         <div class="row justify-content-between">
             <div class="col">
                 <h4><strong>New Schema</strong></h4>
