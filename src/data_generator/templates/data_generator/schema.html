@@ -17,13 +17,13 @@
 
         {{ formset.management_form }}
         {% for form in formset %}
-        <div class="form-row custom-row formset-{{ forloop.counter0 }}">
+        <div class="form-row custom-row">
             {{ form }}
-            <button type="button" class="btn btn-danger" value="{{ forloop.counter0 }}"> Delete </button>
+            <button type="button" name="delete" class="btn btn-danger"> Delete </button>
         </div>
         {% endfor %}
 
-        <button type="button" class="btn btn-primary"> Add Column</button>
+        <button type="button" class="btn btn-primary" value="add"> Add Column </button>
 
     </form>
 
