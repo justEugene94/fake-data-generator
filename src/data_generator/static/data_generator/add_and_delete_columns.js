@@ -1,6 +1,5 @@
 jQuery(document).ready(function () {
   $('[type=button]').click(function (e) {
-    console.log('clicked')
     let columns = $('.custom-row')
     if ($(this).val() === 'add') {
       let lastColumn = columns.last()
@@ -17,7 +16,6 @@ jQuery(document).ready(function () {
       }
       columns.last().after(clonedLastColumn)
     } else {
-      console.log(columns.length)
       if (columns.length > 1)
         $(this).parent().remove()
     }
