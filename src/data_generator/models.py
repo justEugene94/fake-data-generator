@@ -48,7 +48,8 @@ class Column(models.Model):
     schema = models.ForeignKey(Schema, on_delete=models.CASCADE)
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    range = models.CharField(max_length=50, blank=True, null=True)
+    range_min = models.IntegerField(blank=True, null=True)
+    range_max = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name
