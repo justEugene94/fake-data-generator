@@ -1,6 +1,7 @@
 jQuery(document).ready(function () {
   $('[type=button]').click(function (e) {
     let columns = $('.custom-row')
+    let formTotalSelector = $('[name=form-TOTAL_FORMS]')
     if ($(this).val() === 'add') {
       let lastColumn = columns.last()
       let clonedLastColumn = lastColumn.clone(true)
@@ -15,9 +16,13 @@ jQuery(document).ready(function () {
         }
       }
       columns.last().after(clonedLastColumn)
+      formTotalSelector.val(parseInt(formTotalSelector.val()) + 1)
     } else {
-      if (columns.length > 1)
+      if (columns.length > 1) {
         $(this).parent().remove()
+        formTotalSelector.val(parseInt(formTotalSelector.val()) - 1)
+
+      }
     }
   })
 })
