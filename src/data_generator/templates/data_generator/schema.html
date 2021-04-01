@@ -1,5 +1,9 @@
-{% extends 'data_generator/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
+
+{% block css %}
+    <link href="{% static 'data_generator/css/base.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 
