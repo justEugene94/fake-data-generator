@@ -16,7 +16,7 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-            {% for dict in formset.errors %}
+            {% for dict in formset.non_form_errors %}
                 {% for error in dict.values %}
                     <div class="alert alert-danger">
                         <strong>{{ error|escape }}</strong>

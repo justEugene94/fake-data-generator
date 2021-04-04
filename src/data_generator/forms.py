@@ -1,7 +1,5 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import NumberInput, modelformset_factory, BaseModelFormSet
-from django.core.validators import EMPTY_VALUES
 
 from data_generator.models import Column, Schema, Type
 
@@ -62,23 +60,24 @@ class BaseColumnFormSet(BaseModelFormSet):
     def clean(self):
         """ Adds validation to check that orders don't repeat """
 
+        super(BaseColumnFormSet, self).clean()
+
         if any(self.errors):
             return
 
-        #todo: Validation
+        # todo: Validation
         for form in self.forms:
-            if form.cleaned_data.get('type') == 'Integer' or form.cleaned_data.get('type') == 'Text':
+            if form.cleaned_data.get('type') == Column.objects.get(name='Integer').pk \
+                    or \
+                    form.cleaned_data.get('type') == Column.objects.get(name='Text').pk:
 
-                range_min = self.cleaned_data.get('range_min', None)
-                range_max = self.cleaned_data.get('range_min', None)
-                if range_min in EMPTY_VALUES:
-                    # self._errors['range_min'] = self.error_class(['Range min is required here!'])
-                    raise ValidationError('Range min is required here!')
-                if range_max in EMPTY_VALUES:
-                    # self._errors['range_max'] = self.error_class(['Range max is required here!'])
-                    raise ValidationError('Range max is required here!')
+                range_min = form.cleaned_data.get('range_min', None)
+                range_max = form.cleaned_data.get('range_min', None)
+                if not range_min:
+                    raise forms.ValidationError('Range min is required here!')
+                if not range_max:
+                    raise forms.ValidationError('Range max is required here!')
         return self.cleaned_data
-
 
     def get_ordering_widget(self):
         return NumberInput(attrs={'class': 'form-control formset-secondary'})
